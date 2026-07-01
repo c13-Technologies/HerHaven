@@ -1,0 +1,148 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   Her Haven — Serene editorial design system
+   Warm paper, soft rose, faded peach, deep stone ink.
+   ============================================================ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+  --radius-3xl: calc(var(--radius) + 20px);
+  --radius-full: 9999px;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", "Iowan Old Style", Georgia, serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-rose: var(--rose);
+  --color-rose-soft: var(--rose-soft);
+  --color-rose-deep: var(--rose-deep);
+  --color-peach: var(--peach);
+  --color-lavender: var(--lavender);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* paper-warm background, stone ink */
+  --background: oklch(0.985 0.006 70);          /* #fdfcfb */
+  --foreground: oklch(0.22 0.015 30);           /* deep stone */
+
+  --paper: oklch(0.98 0.008 60);
+  --ink: oklch(0.22 0.015 30);
+  --ink-soft: oklch(0.44 0.018 30);
+
+  --card: oklch(0.995 0.004 70);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.995 0.004 70);
+  --popover-foreground: var(--foreground);
+
+  /* primary = deep stone/ink — used for primary CTAs */
+  --primary: oklch(0.22 0.015 30);
+  --primary-foreground: oklch(0.985 0.006 70);
+
+  --secondary: oklch(0.95 0.012 50);
+  --secondary-foreground: oklch(0.28 0.018 30);
+
+  --muted: oklch(0.955 0.008 60);
+  --muted-foreground: oklch(0.48 0.018 30);
+
+  --accent: oklch(0.93 0.04 25);                /* soft peach accent */
+  --accent-foreground: oklch(0.30 0.05 25);
+
+  --destructive: oklch(0.55 0.18 25);
+  --destructive-foreground: oklch(0.985 0.006 70);
+
+  --border: oklch(0.92 0.008 50);
+  --input: oklch(0.92 0.008 50);
+  --ring: oklch(0.70 0.08 20);
+
+  /* brand-warm palette */
+  --rose: oklch(0.78 0.10 20);                  /* dusty rose */
+  --rose-soft: oklch(0.93 0.04 20);
+  --rose-deep: oklch(0.42 0.10 20);             /* deep rose for serif italic */
+  --peach: oklch(0.90 0.06 50);                 /* soft peach */
+  --lavender: oklch(0.86 0.05 300);             /* soft lavender */
+
+  --sidebar: oklch(0.98 0.008 60);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-serif { font-family: var(--font-serif); }
+  .font-sans { font-family: var(--font-sans); }
+
+  ::selection {
+    background: oklch(0.93 0.04 20);
+    color: var(--ink);
+  }
+}
+
+@utility tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background: var(--rose-soft);
+  color: var(--rose-deep);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@utility eyebrow {
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
