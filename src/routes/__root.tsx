@@ -8,12 +8,14 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { useTheme } from "../hooks/use-theme";
 
 import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { BottomNav, MobileFab } from "@/components/bottom-nav";
 
 function NotFoundComponent() {
   return (
@@ -115,6 +117,21 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                try {
+                  var t=localStorage.getItem('her-haven-theme');
+                  if(!t){
+                    t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+                  }
+                  if(t==='dark') document.documentElement.classList.add('dark');
+                }catch(e){}
+              })();
+            `,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
@@ -140,12 +157,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-dvh flex-col bg-background">
+      <div className="flex min-h-dvh flex-col bg-background pb-16 sm:pb-0">
         <SiteHeader />
         <main className="flex-1">
           <Outlet />
         </main>
         <SiteFooter />
+        <BottomNav />
+        <MobileFab />
       </div>
       <Toaster position="top-center" richColors />
     </QueryClientProvider>

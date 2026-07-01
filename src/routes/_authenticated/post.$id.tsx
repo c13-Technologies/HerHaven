@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Heart, Hand, Flag, Trash2 } from "lucide-react";
+import { CommentCard, buildCommentTree, type CommentData, type CommentReactionMap } from "@/components/comment-card";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -72,18 +73,14 @@ function PostPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("comments")
-        .select("*, profiles:author_id(username, display_name, avatar_url)")
+        .select("id, body, is_anonymous, created_at, author_id, parent_id, profiles:author_id(username, display_name, avatar_url)")
         .eq("post_id", id)
         .order("created_at");
-      return (data ?? []) as unknown as Array<{
-        id: string;
-        body: string;
-        is_anonymous: boolean;
-        created_at: string;
-        profiles?: { username: string | null; display_name: string | null; avatar_url: string | null } | null;
-      }>;
+      return (data ?? []) as unknown as Array<Omit<CommentData, "replies">>;
     },
   });
+
+  const commentTree = comments ? buildCommentTree(comments) : [];
 
   const { data: reactions } = useQuery({
     queryKey: ["reactions", id],
@@ -95,6 +92,51 @@ function PostPage() {
       return data ?? [];
     },
   });
+
+  // Fetch comment reactions for this post's comments
+  const { data: commentReactions } = useQuery({
+    queryKey: ["comment-reactions", id],
+    enabled: !!comments && comments.length > 0,
+    queryFn: async () => {
+      const commentIds = comments!.map((c) => c.id);
+      const { data } = await supabase
+        .from("reactions")
+        .select("type, user_id, comment_id")
+        .in("comment_id", commentIds)
+        .not("comment_id", "is", null);
+      return (data as unknown as Array<{ type: string; user_id: string; comment_id: string }>) ?? [];
+    },
+  });
+
+  // Build reaction map: comment_id → { counts, myTypes }
+  const reactionMap: CommentReactionMap = {};
+  if (commentReactions) {
+    for (const r of commentReactions) {
+      if (!reactionMap[r.comment_id]) {
+        reactionMap[r.comment_id] = { counts: {}, myTypes: [] };
+      }
+      reactionMap[r.comment_id].counts[r.type] =
+        (reactionMap[r.comment_id].counts[r.type] ?? 0) + 1;
+      if (r.user_id === user?.id) {
+        reactionMap[r.comment_id].myTypes.push(r.type);
+      }
+    }
+  }
+
+  const toggleCommentReaction = async (commentId: string, type: string) => {
+    if (!user) return;
+    const entry = reactionMap[commentId];
+    const hasIt = entry?.myTypes.includes(type);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const table = supabase.from("reactions") as any;
+    if (hasIt) {
+      await table.delete().match({ comment_id: commentId, user_id: user.id, type });
+    } else {
+      await table.insert({ comment_id: commentId, user_id: user.id, type });
+    }
+    qc.invalidateQueries({ queryKey: ["comment-reactions", id] });
+  };
 
   const counts: Record<string, number> = {};
   const mine = new Set<string>();
@@ -128,7 +170,7 @@ function PostPage() {
     }
     setComment("");
     qc.invalidateQueries({ queryKey: ["comments", id] });
-    // notify post author (best effort, RLS limits to self → we skip if not own)
+    // notify post author (best effort)
     if (post && post.author_id !== user.id) {
       await supabase.from("notifications").insert({
         user_id: post.author_id,
@@ -138,6 +180,22 @@ function PostPage() {
         link: `/post/${id}`,
       }).then(() => {}, () => {});
     }
+  };
+
+  const submitReply = async (parentId: string, body: string, anonymous: boolean) => {
+    if (!user) return;
+    const { error } = await supabase.from("comments").insert({
+      post_id: id,
+      author_id: user.id,
+      parent_id: parentId,
+      body,
+      is_anonymous: anonymous,
+    });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    qc.invalidateQueries({ queryKey: ["comments", id] });
   };
 
   const deletePost = async () => {
@@ -316,23 +374,16 @@ function PostPage() {
           </div>
         </form>
 
-        <div className="mt-8 space-y-5">
-          {(comments ?? []).map((c) => {
-            const name = c.is_anonymous
-              ? "Anonymous"
-              : c.profiles?.display_name ?? c.profiles?.username ?? "A sister";
-            return (
-              <div key={c.id} className="rounded-2xl border border-border bg-card p-5">
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>— {name}</span>
-                  <span>{formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}</span>
-                </div>
-                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-                  {c.body}
-                </p>
-              </div>
-            );
-          })}
+        <div className="mt-8 space-y-3">
+          {commentTree.map((node) => (
+            <CommentCard
+              key={node.id}
+              comment={node}
+              reactionMap={reactionMap}
+              onToggleReaction={toggleCommentReaction}
+              onSubmitReply={submitReply}
+            />
+          ))}
           {comments && comments.length === 0 && (
             <p className="text-sm text-muted-foreground">No replies yet. Be the first to listen.</p>
           )}

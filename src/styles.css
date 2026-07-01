@@ -105,6 +105,59 @@
   --sidebar-ring: var(--ring);
 }
 
+.dark {
+  --background: oklch(0.18 0.012 30);           /* warm dark stone */
+  --foreground: oklch(0.94 0.006 70);           /* soft cream text */
+
+  --paper: oklch(0.21 0.010 30);
+  --ink: oklch(0.94 0.006 70);
+  --ink-soft: oklch(0.70 0.015 40);
+
+  --card: oklch(0.22 0.012 30);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.24 0.012 30);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.92 0.015 60);              /* warm ivory */
+  --primary-foreground: oklch(0.18 0.012 30);
+
+  --secondary: oklch(0.28 0.012 40);
+  --secondary-foreground: oklch(0.90 0.010 50);
+
+  --muted: oklch(0.26 0.010 35);
+  --muted-foreground: oklch(0.65 0.018 40);
+
+  --accent: oklch(0.32 0.06 25);                /* deep rose accent */
+  --accent-foreground: oklch(0.92 0.04 25);
+
+  --destructive: oklch(0.45 0.18 20);
+  --destructive-foreground: oklch(0.94 0.006 70);
+
+  --border: oklch(0.28 0.012 40);
+  --input: oklch(0.28 0.012 40);
+  --ring: oklch(0.65 0.08 20);
+
+  --rose: oklch(0.60 0.12 20);
+  --rose-soft: oklch(0.25 0.05 20);
+  --rose-deep: oklch(0.75 0.10 25);
+  --peach: oklch(0.35 0.06 50);
+  --lavender: oklch(0.35 0.06 300);
+
+  --sidebar: oklch(0.18 0.012 30);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+.dark ::selection {
+  background: oklch(0.35 0.06 20);
+  color: var(--foreground);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -137,6 +190,18 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 500;
+}
+
+@utility safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @utility eyebrow {

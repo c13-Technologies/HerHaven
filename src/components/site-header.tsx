@@ -1,7 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
@@ -14,13 +15,15 @@ const NAV = [
 
 export function SiteHeader() {
   const { user, profile, isAdmin, signOut } = useAuth();
+  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="mx-auto flex h-16 max-w-6xl items-center px-5 sm:px-8">
+        {/* Logo — always on the left */}
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--rose-soft)] text-[var(--rose-deep)]">
             <span className="font-serif text-base italic">h</span>
           </span>
@@ -29,7 +32,8 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        {/* Desktop nav — fills remaining space, centered */}
+        <nav className="ml-8 hidden flex-1 items-center justify-center gap-8 md:flex">
           {NAV.map((n) => {
             const active = pathname === n.to;
             return (
@@ -49,6 +53,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          {/* Desktop theme toggle */}
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="grid h-9 w-9 place-items-center rounded-full border border-border bg-transparent text-muted-foreground transition hover:bg-muted hover:text-foreground"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           {user ? (
             <>
               {isAdmin && (
@@ -99,13 +111,26 @@ export function SiteHeader() {
           )}
         </div>
 
-        <button
-          aria-label={open ? "Close menu" : "Open menu"}
-          className="grid h-10 w-10 place-items-center rounded-full border border-border md:hidden"
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
+        {/* Spacer — pushes mobile buttons to the right */}
+        <div className="flex-1 md:hidden" />
+
+        {/* Mobile: theme toggle + hamburger, grouped on the right */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="grid h-9 w-9 place-items-center rounded-full border border-border bg-transparent text-muted-foreground transition hover:bg-muted hover:text-foreground"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <button
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="grid h-10 w-10 place-items-center rounded-full border border-border"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
 
       {open && (

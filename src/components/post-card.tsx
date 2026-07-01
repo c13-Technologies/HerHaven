@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { formatDistanceToNow } from "date-fns";
+import { Heart, MessageCircle } from "lucide-react";
+import { useState } from "react";
 
 export interface FeedPost {
   id: string;
@@ -25,6 +27,9 @@ const TAG_LABEL: Record<FeedPost["tag"], string> = {
 };
 
 export function PostCard({ post }: { post: FeedPost }) {
+  const [liked, setLiked] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  
   const author = post.is_anonymous
     ? { name: "Anonymous", username: null as string | null }
     : {
@@ -32,8 +37,16 @@ export function PostCard({ post }: { post: FeedPost }) {
         username: post.profiles?.username ?? null,
       };
 
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLiked((l) => !l);
+    setAnimating(true);
+    setTimeout(() => setAnimating(false), 400);
+  };
+
   return (
-    <article className="rounded-2xl border border-border bg-card p-6 transition hover:-translate-y-0.5 hover:shadow-sm">
+    <article className="group rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-muted-foreground/20">
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="tag-chip">{TAG_LABEL[post.tag]}</span>
         <Link
@@ -60,20 +73,50 @@ export function PostCard({ post }: { post: FeedPost }) {
         {post.body}
       </p>
 
-      <div className="mt-5 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
-        <span>
-          — {author.name}
-          {!post.is_anonymous && author.username && (
-            <Link
-              to="/u/$username"
-              params={{ username: author.username }}
-              className="ml-1 italic hover:text-foreground"
-            >
-              @{author.username}
-            </Link>
-          )}
-        </span>
-        <span>{formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}</span>
+      <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleLike}
+            className={`flex items-center gap-1.5 text-xs transition-all duration-200 ${
+              liked
+                ? "text-[var(--rose-deep)]"
+                : "text-muted-foreground hover:text-[var(--rose)]"
+            }`}
+            aria-label={liked ? "Unlike" : "Like"}
+          >
+            <Heart
+              className={`h-4 w-4 transition-all duration-300 ${
+                liked ? "fill-[var(--rose-deep)]" : ""
+              } ${animating ? "scale-125" : "scale-100"}`}
+            />
+            <span>{liked ? "Loved" : "Love"}</span>
+          </button>
+          <Link
+            to="/post/$id"
+            params={{ id: post.id }}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span>Reply</span>
+          </Link>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span>
+            — {author.name}
+            {!post.is_anonymous && author.username && (
+              <Link
+                to="/u/$username"
+                params={{ username: author.username }}
+                className="ml-1 italic hover:text-foreground"
+              >
+                @{author.username}
+              </Link>
+            )}
+          </span>
+          <span>·</span>
+          <span>{formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}</span>
+        </div>
       </div>
     </article>
   );

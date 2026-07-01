@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { AvatarUploader } from "@/components/avatar-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,7 @@ function MePage() {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [anon, setAnon] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -31,6 +33,7 @@ function MePage() {
       setUsername(profile.username ?? "");
       setBio(profile.bio ?? "");
       setAnon(profile.default_anonymous);
+      setAvatarUrl(profile.avatar_url ?? null);
     }
   }, [profile]);
 
@@ -70,15 +73,56 @@ function MePage() {
     qc.invalidateQueries();
   };
 
+  const handleAvatarUploaded = (url: string) => {
+    setAvatarUrl(url);
+    qc.invalidateQueries();
+  };
+
+  const handleAvatarRemoved = async () => {
+    if (!user) return;
+    // Delete from storage if we have a URL to parse
+    if (avatarUrl) {
+      try {
+        const url = new URL(avatarUrl);
+        const pathMatch = url.pathname.match(/\/avatars\/(.+)$/);
+        if (pathMatch) {
+          await supabase.storage.from("avatars").remove([pathMatch[1]]);
+        }
+      } catch {
+        // Silently ignore storage deletion failures
+      }
+    }
+    await supabase
+      .from("profiles")
+      .update({ avatar_url: null })
+      .eq("id", user.id);
+    setAvatarUrl(null);
+    qc.invalidateQueries();
+    toast.success("Avatar removed.");
+  };
+
   return (
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
-      <p className="eyebrow">My profile</p>
-      <h1 className="mt-2 font-serif text-4xl font-light tracking-tight text-foreground sm:text-5xl">
-        {profile?.display_name ?? "You"}
-      </h1>
-      {username && (
-        <p className="mt-1 text-sm text-muted-foreground">@{username}</p>
-      )}
+      {/* Header with avatar */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+        {user && (
+          <AvatarUploader
+            userId={user.id}
+            currentUrl={avatarUrl}
+            onUploaded={handleAvatarUploaded}
+            onRemoved={handleAvatarRemoved}
+          />
+        )}
+        <div className="text-center sm:text-left">
+          <p className="eyebrow">My profile</p>
+          <h1 className="mt-2 font-serif text-4xl font-light tracking-tight text-foreground sm:text-5xl">
+            {profile?.display_name ?? "You"}
+          </h1>
+          {username && (
+            <p className="mt-1 text-sm text-muted-foreground">@{username}</p>
+          )}
+        </div>
+      </div>
 
       <section className="mt-10 rounded-2xl border border-border bg-card p-6 sm:p-8">
         <h2 className="font-serif text-xl text-foreground">Settings</h2>
