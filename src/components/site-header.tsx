@@ -1,13 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Menu, X, Moon, Sun, Bell } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
+import { useNotificationCount } from "@/hooks/use-notification-count";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/feed", label: "Feed" },
+  { to: "/search", label: "Search" },
   { to: "/categories", label: "Categories" },
   { to: "/circles", label: "Circles" },
   { to: "/about", label: "About" },
@@ -16,6 +18,7 @@ const NAV = [
 export function SiteHeader() {
   const { user, profile, isAdmin, signOut } = useAuth();
   const { theme, toggle } = useTheme();
+  const { unreadCount, resetCount } = useNotificationCount(user?.id);
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -73,9 +76,16 @@ export function SiteHeader() {
               )}
               <Link
                 to="/notifications"
-                className="text-sm text-muted-foreground hover:text-foreground"
+                onClick={resetCount}
+                className="relative inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
               >
-                Notifications
+                <Bell className="h-4 w-4" />
+                <span className="hidden lg:inline">Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="absolute -right-3.5 -top-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[var(--rose-deep)] px-1 text-[9px] font-bold text-white">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
               </Link>
               <Link
                 to="/me"
@@ -114,7 +124,7 @@ export function SiteHeader() {
         {/* Spacer — pushes mobile buttons to the right */}
         <div className="flex-1 md:hidden" />
 
-        {/* Mobile: theme toggle + hamburger, grouped on the right */}
+        {/* Mobile: theme toggle + bell + hamburger, grouped on the right */}
         <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={toggle}
@@ -123,6 +133,19 @@ export function SiteHeader() {
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
+          <Link
+            to="/notifications"
+            onClick={resetCount}
+            className="relative grid h-9 w-9 place-items-center rounded-full border border-border bg-transparent text-muted-foreground transition hover:bg-muted hover:text-foreground"
+            aria-label="Notifications"
+          >
+            <Bell className="h-4 w-4" />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[var(--rose-deep)] px-1 text-[9px] font-bold text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </Link>
           <button
             aria-label={open ? "Close menu" : "Open menu"}
             className="grid h-10 w-10 place-items-center rounded-full border border-border"
@@ -158,10 +181,15 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   to="/notifications"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-muted"
+                  onClick={() => { setOpen(false); resetCount(); }}
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-foreground hover:bg-muted"
                 >
                   Notifications
+                  {unreadCount > 0 && (
+                    <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[var(--rose-deep)] px-1.5 text-[10px] font-bold text-white">
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
                 {isAdmin && (
                   <Link

@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
@@ -55,6 +56,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedNotificationsRoute =
   AuthenticatedNotificationsRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/feed': typeof AuthenticatedFeedRoute
   '/me': typeof AuthenticatedMeRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/feed': typeof AuthenticatedFeedRoute
   '/me': typeof AuthenticatedMeRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/c/$slug': typeof AuthenticatedCSlugRoute
   '/_authenticated/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/_authenticated/post/$id': typeof AuthenticatedPostIdRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/me'
     | '/notifications'
+    | '/search'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/me'
     | '/notifications'
+    | '/search'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_authenticated/feed'
     | '/_authenticated/me'
     | '/_authenticated/notifications'
+    | '/_authenticated/search'
     | '/_authenticated/c/$slug'
     | '/_authenticated/circles/$id'
     | '/_authenticated/post/$id'
@@ -279,6 +291,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/search': {
+      id: '/_authenticated/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/notifications': {
       id: '/_authenticated/notifications'
@@ -378,6 +397,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedCSlugRoute: typeof AuthenticatedCSlugRoute
   AuthenticatedPostIdRoute: typeof AuthenticatedPostIdRoute
   AuthenticatedPostNewRoute: typeof AuthenticatedPostNewRoute
@@ -391,6 +411,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedCSlugRoute: AuthenticatedCSlugRoute,
   AuthenticatedPostIdRoute: AuthenticatedPostIdRoute,
   AuthenticatedPostNewRoute: AuthenticatedPostNewRoute,

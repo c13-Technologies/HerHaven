@@ -1,11 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Compass, LayoutGrid, User, Plus } from "lucide-react";
+import { Home, Compass, LayoutGrid, User, Plus, Search } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 const TABS = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/feed", icon: Compass, label: "Feed" },
   { to: "/categories", icon: LayoutGrid, label: "Explore" },
+  { to: "/search", icon: Search, label: "Search" },
   { to: "/me", icon: User, label: "Profile" },
 ] as const;
 
