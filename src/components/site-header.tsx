@@ -77,14 +77,12 @@ export function SiteHeader() {
               <Link
                 to="/notifications"
                 onClick={resetCount}
-                className="relative inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                className="relative grid h-9 w-9 place-items-center rounded-full border border-border bg-transparent text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                aria-label="Notifications"
               >
                 <Bell className="h-4 w-4" />
-                <span className="hidden lg:inline">Notifications</span>
                 {unreadCount > 0 && (
-                  <span className="absolute -right-3.5 -top-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[var(--rose-deep)] px-1 text-[9px] font-bold text-white">
-                    {unreadCount > 99 ? "99+" : unreadCount}
-                  </span>
+                  <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[var(--rose-deep)]" />
                 )}
               </Link>
               <Link
@@ -141,9 +139,7 @@ export function SiteHeader() {
           >
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[var(--rose-deep)] px-1 text-[9px] font-bold text-white">
-                {unreadCount > 99 ? "99+" : unreadCount}
-              </span>
+              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[var(--rose-deep)]" />
             )}
           </Link>
           <button
