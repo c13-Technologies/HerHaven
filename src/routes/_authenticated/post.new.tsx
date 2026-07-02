@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/post/new")({
 function NewPostPage() {
   const { category: initialCategory } = Route.useSearch();
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const { user, profile } = useAuth();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -90,6 +91,7 @@ function NewPostPage() {
       return;
     }
     toast.success("Your story is shared.");
+    qc.invalidateQueries({ queryKey: ["feed"] });
     navigate({ to: "/post/$id", params: { id: data.id } });
   };
 
