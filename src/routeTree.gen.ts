@@ -23,11 +23,16 @@ import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/f
 import { Route as AuthenticatedCirclesRouteImport } from './routes/_authenticated/circles'
 import { Route as AuthenticatedCategoriesRouteImport } from './routes/_authenticated/categories'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedUUsernameRouteImport } from './routes/_authenticated/u.$username'
 import { Route as AuthenticatedPostNewRouteImport } from './routes/_authenticated/post.new'
 import { Route as AuthenticatedPostIdRouteImport } from './routes/_authenticated/post.$id'
 import { Route as AuthenticatedCirclesIdRouteImport } from './routes/_authenticated/circles.$id'
 import { Route as AuthenticatedCSlugRouteImport } from './routes/_authenticated/c.$slug'
+import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
+import { Route as AuthenticatedAdminMembersRouteImport } from './routes/_authenticated/admin.members'
+import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin.categories'
 
 const RulesRoute = RulesRouteImport.update({
   id: '/rules',
@@ -99,6 +104,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedUUsernameRoute = AuthenticatedUUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
@@ -124,6 +134,30 @@ const AuthenticatedCSlugRoute = AuthenticatedCSlugRouteImport.update({
   path: '/c/$slug',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminReportsRoute =
+  AuthenticatedAdminReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMembersRoute =
+  AuthenticatedAdminMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContentRoute =
+  AuthenticatedAdminContentRouteImport.update({
+    id: '/content',
+    path: '/content',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCategoriesRoute =
+  AuthenticatedAdminCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,7 +165,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/rules': typeof RulesRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/categories': typeof AuthenticatedCategoriesRoute
   '/circles': typeof AuthenticatedCirclesRouteWithChildren
   '/feed': typeof AuthenticatedFeedRoute
@@ -139,11 +173,16 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/whimsy': typeof AuthenticatedWhimsyRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
   '/post/new': typeof AuthenticatedPostNewRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,7 +190,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/rules': typeof RulesRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/categories': typeof AuthenticatedCategoriesRoute
   '/circles': typeof AuthenticatedCirclesRouteWithChildren
   '/feed': typeof AuthenticatedFeedRoute
@@ -159,11 +197,16 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/search': typeof AuthenticatedSearchRoute
   '/whimsy': typeof AuthenticatedWhimsyRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
   '/post/new': typeof AuthenticatedPostNewRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -173,7 +216,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/rules': typeof RulesRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/categories': typeof AuthenticatedCategoriesRoute
   '/_authenticated/circles': typeof AuthenticatedCirclesRouteWithChildren
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
@@ -181,11 +224,16 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/whimsy': typeof AuthenticatedWhimsyRoute
+  '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
+  '/_authenticated/admin/members': typeof AuthenticatedAdminMembersRoute
+  '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/c/$slug': typeof AuthenticatedCSlugRoute
   '/_authenticated/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/_authenticated/post/$id': typeof AuthenticatedPostIdRoute
   '/_authenticated/post/new': typeof AuthenticatedPostNewRoute
   '/_authenticated/u/$username': typeof AuthenticatedUUsernameRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -203,11 +251,16 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/whimsy'
+    | '/admin/categories'
+    | '/admin/content'
+    | '/admin/members'
+    | '/admin/reports'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
     | '/post/new'
     | '/u/$username'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -215,7 +268,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/rules'
-    | '/admin'
     | '/categories'
     | '/circles'
     | '/feed'
@@ -223,11 +275,16 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/whimsy'
+    | '/admin/categories'
+    | '/admin/content'
+    | '/admin/members'
+    | '/admin/reports'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
     | '/post/new'
     | '/u/$username'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -244,11 +301,16 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/search'
     | '/_authenticated/whimsy'
+    | '/_authenticated/admin/categories'
+    | '/_authenticated/admin/content'
+    | '/_authenticated/admin/members'
+    | '/_authenticated/admin/reports'
     | '/_authenticated/c/$slug'
     | '/_authenticated/circles/$id'
     | '/_authenticated/post/$id'
     | '/_authenticated/post/new'
     | '/_authenticated/u/$username'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -360,6 +422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/u/$username': {
       id: '/_authenticated/u/$username'
       path: '/u/$username'
@@ -395,8 +464,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCSlugRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/reports': {
+      id: '/_authenticated/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AuthenticatedAdminReportsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/members': {
+      id: '/_authenticated/admin/members'
+      path: '/members'
+      fullPath: '/admin/members'
+      preLoaderRoute: typeof AuthenticatedAdminMembersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/content': {
+      id: '/_authenticated/admin/content'
+      path: '/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/categories': {
+      id: '/_authenticated/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
+  AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
+  AuthenticatedAdminMembersRoute: typeof AuthenticatedAdminMembersRoute
+  AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCategoriesRoute: AuthenticatedAdminCategoriesRoute,
+  AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
+  AuthenticatedAdminMembersRoute: AuthenticatedAdminMembersRoute,
+  AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedCirclesRouteChildren {
   AuthenticatedCirclesIdRoute: typeof AuthenticatedCirclesIdRoute
@@ -410,7 +526,7 @@ const AuthenticatedCirclesRouteWithChildren =
   AuthenticatedCirclesRoute._addFileChildren(AuthenticatedCirclesRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedCategoriesRoute: typeof AuthenticatedCategoriesRoute
   AuthenticatedCirclesRoute: typeof AuthenticatedCirclesRouteWithChildren
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
@@ -425,7 +541,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedCategoriesRoute: AuthenticatedCategoriesRoute,
   AuthenticatedCirclesRoute: AuthenticatedCirclesRouteWithChildren,
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,

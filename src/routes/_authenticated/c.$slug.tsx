@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PostCard, type FeedPost } from "@/components/post-card";
 import { Button } from "@/components/ui/button";
+import { CategoryIcon } from "@/lib/category-icons";
 
 export const Route = createFileRoute("/_authenticated/c/$slug")({
   head: ({ params }) => ({ meta: [{ title: `${params.slug} · Her Haven` }] }),
@@ -44,8 +45,10 @@ function CategoryPage() {
       </Link>
       <header className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
         <div className="min-w-0">
-          <p className="font-serif text-3xl">{category?.emoji}</p>
-          <h1 className="mt-2 font-serif text-4xl font-light tracking-tight text-foreground sm:text-5xl">
+          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[var(--rose-soft)]/60 text-[var(--rose-deep)] ring-1 ring-[var(--rose)]/20">
+            <CategoryIcon slug={slug} className="h-7 w-7" />
+          </span>
+          <h1 className="mt-4 font-serif text-4xl font-light tracking-tight text-foreground sm:text-5xl">
             {category?.name ?? slug}
           </h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">

@@ -51,10 +51,10 @@ function PostPage() {
       const { data, error } = await supabase
         .from("posts")
         .select(
-          "*, profiles:author_id(username, display_name, avatar_url), categories:category_slug(name, slug, emoji)",
+          "*, profiles:author_id(username, display_name, avatar_url), categories:category_slug(name, slug)",
         )
         .eq("id", id)
-        .single();
+        .maybeSingle();
       if (error) throw error;
       return data as unknown as {
         id: string;
@@ -66,9 +66,12 @@ function PostPage() {
         is_sensitive: boolean;
         created_at: string;
         category_slug: string;
+        hidden_at: string | null;
+        hidden_by: string | null;
+        hidden_reason: string | null;
         profiles?: { username: string | null; display_name: string | null; avatar_url: string | null } | null;
-        categories?: { name: string; slug: string; emoji: string | null } | null;
-      };
+        categories?: { name: string; slug: string } | null;
+      } | null;
     },
   });
 
@@ -233,8 +236,20 @@ function PostPage() {
 
   if (!post) {
     return (
-      <div className="mx-auto max-w-2xl px-5 py-12 sm:px-8">
-        <p className="text-sm text-muted-foreground">Loading story…</p>
+      <div className="mx-auto max-w-2xl px-5 py-16 text-center sm:px-8">
+        <p className="eyebrow">Story</p>
+        <h1 className="mt-3 font-serif text-3xl text-foreground">
+          This story is no longer available.
+        </h1>
+        <p className="mt-3 text-sm text-muted-foreground">
+          It may have been hidden by a moderator, deleted, or never existed.
+        </p>
+        <Link
+          to="/feed"
+          className="mt-8 inline-block text-xs uppercase tracking-[0.22em] text-muted-foreground hover:text-foreground"
+        >
+          ← Back to the feed
+        </Link>
       </div>
     );
   }
@@ -261,6 +276,12 @@ function PostPage() {
     ? "Anonymous"
     : post.profiles?.display_name ?? post.profiles?.username ?? "A sister";
 
+  // Authors always see their own posts through the new RLS. If the post
+  // is hidden, show a soft banner so the author knows it was removed.
+  const isAuthor = !!user && post.author_id === user.id;
+  const isHiddenFromCommunity = !!post.hidden_at;
+  const showAuthorRemovalBanner = isAuthor && isHiddenFromCommunity;
+
   const canDelete = user && (post.author_id === user.id || isModerator);
 
   return (
@@ -281,6 +302,30 @@ function PostPage() {
           {post.categories?.name ?? post.category_slug}
         </Link>
       </div>
+
+      {showAuthorRemovalBanner && (
+        <div
+          role="status"
+          className="mt-5 flex items-start gap-3 rounded-2xl border border-[var(--rose)]/40 bg-[var(--rose-soft)]/30 p-4 text-sm"
+        >
+          <span aria-hidden className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-[var(--rose-deep)]" />
+          <div className="min-w-0">
+            <p className="font-serif text-base text-foreground">
+              Removed by a moderator
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              This story is no longer visible to the community.{" "}
+              {post.hidden_reason ? (
+                <>
+                  Reason: <span className="text-foreground">{post.hidden_reason}</span>.
+                </>
+              ) : (
+                <>No reason was given.</>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
 
       <h1 className="mt-4 font-serif text-4xl font-light leading-tight tracking-tight text-foreground sm:text-5xl">
         {post.title}

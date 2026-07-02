@@ -17,24 +17,51 @@ export type Database = {
       categories: {
         Row: {
           description: string | null
-          emoji: string | null
           name: string
           ord: number
           slug: string
         }
         Insert: {
           description?: string | null
-          emoji?: string | null
           name: string
           ord?: number
           slug: string
         }
         Update: {
           description?: string | null
-          emoji?: string | null
           name?: string
           ord?: number
           slug?: string
+        }
+        Relationships: []
+      }
+      admin_audit_logs: {
+        Row: {
+          action_type: string
+          actor_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          actor_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          actor_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_id?: string
+          target_type?: string
         }
         Relationships: []
       }
@@ -102,6 +129,9 @@ export type Database = {
           author_id: string
           body: string
           created_at: string
+          hidden_at: string | null
+          hidden_by: string | null
+          hidden_reason: string | null
           id: string
           is_anonymous: boolean
           parent_id: string | null
@@ -111,6 +141,9 @@ export type Database = {
           author_id: string
           body: string
           created_at?: string
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
           id?: string
           is_anonymous?: boolean
           parent_id?: string | null
@@ -120,6 +153,9 @@ export type Database = {
           author_id?: string
           body?: string
           created_at?: string
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
           id?: string
           is_anonymous?: boolean
           parent_id?: string | null
@@ -189,6 +225,9 @@ export type Database = {
           category_slug: string
           circle_id: string | null
           created_at: string
+          hidden_at: string | null
+          hidden_by: string | null
+          hidden_reason: string | null
           id: string
           is_anonymous: boolean
           is_sensitive: boolean
@@ -202,6 +241,9 @@ export type Database = {
           category_slug: string
           circle_id?: string | null
           created_at?: string
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
           id?: string
           is_anonymous?: boolean
           is_sensitive?: boolean
@@ -215,6 +257,9 @@ export type Database = {
           category_slug?: string
           circle_id?: string | null
           created_at?: string
+          hidden_at?: string | null
+          hidden_by?: string | null
+          hidden_reason?: string | null
           id?: string
           is_anonymous?: boolean
           is_sensitive?: boolean
@@ -395,6 +440,28 @@ export type Database = {
       is_circle_member: {
         Args: { _circle_id: string; _user_id: string }
         Returns: boolean
+      }
+      admin_set_user_role: {
+        Args: { p_target_user_id: string; p_role: Database["public"]["Enums"]["app_role"] }
+        Returns: undefined
+      }
+      admin_manage_category: {
+        Args: {
+          p_action: string
+          p_description?: string | null
+          p_name?: string | null
+          p_ord?: number | null
+          p_slug: string
+        }
+        Returns: undefined
+      }
+      admin_hide_content: {
+        Args: { p_reason: string; p_target_id: string; p_type: string }
+        Returns: undefined
+      }
+      admin_reinstate_content: {
+        Args: { p_target_id: string; p_type: string }
+        Returns: undefined
       }
     }
     Enums: {
