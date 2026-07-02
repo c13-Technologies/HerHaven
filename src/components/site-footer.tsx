@@ -17,8 +17,7 @@ export function SiteFooter() {
               </p>
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              A quiet, supportive corner of the internet for women to share
-              stories, ask hard questions, and grow together.
+              A safe place, Real talks, Strong together.
             </p>
           </div>
 
