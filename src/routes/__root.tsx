@@ -127,7 +127,18 @@ function RootShell({ children }: { children: ReactNode }) {
                   if(!t){
                     t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
                   }
-                  if(t==='dark') document.documentElement.classList.add('dark');
+                  var dark=t==='dark';
+                  if(dark) document.documentElement.classList.add('dark');
+                  // Apply background-color and color inline so the first paint
+                  // already matches the chosen theme — no flash of white when
+                  // dark is selected. Values mirror the :root / .dark blocks
+                  // in src/styles.css.
+                  document.documentElement.style.backgroundColor = dark
+                    ? 'oklch(0.18 0.012 30)'
+                    : 'oklch(0.985 0.006 70)';
+                  document.documentElement.style.color = dark
+                    ? 'oklch(0.94 0.006 70)'
+                    : 'oklch(0.22 0.015 30)';
                 }catch(e){}
               })();
             `,
