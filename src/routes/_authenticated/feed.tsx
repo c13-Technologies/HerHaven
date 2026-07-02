@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
+import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { PostCard, type FeedPost } from "@/components/post-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, BookOpen, PenLine } from "lucide-react";
 import { ClickSparkle } from "@/components/click-sparkle";
 import { CherryBlossoms } from "@/components/cherry-blossoms";
 
@@ -99,39 +100,58 @@ function FeedPage() {
   const isEmpty = !isLoading && allPosts.length === 0;
 
   return (
-    <div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
+    <div className="mx-auto max-w-3xl px-5 py-10 sm:px-8 sm:py-14">
       <CherryBlossoms />
-      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <p className="eyebrow">The community feed</p>
-          <h1 className="mt-2 truncate font-serif text-4xl font-light tracking-tight text-foreground sm:text-5xl">
-            Today's stories
-          </h1>
+
+      {/* Hero */}
+      <header className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card via-card to-[var(--rose-soft)]/40 px-6 py-10 sm:px-10 sm:py-14">
+        <div
+          aria-hidden
+          className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[var(--rose-soft)]/60 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-16 -left-10 h-56 w-56 rounded-full bg-[var(--peach)]/40 blur-3xl"
+        />
+        <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+          <div className="min-w-0">
+            <p className="eyebrow">The community feed</p>
+            <p className="mt-1 text-xs italic text-muted-foreground">
+              {format(new Date(), "EEEE, MMMM d")}
+            </p>
+            <h1 className="mt-3 font-serif text-4xl font-light leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+              Today's <span className="italic text-[var(--rose-deep)]">stories.</span>
+            </h1>
+          </div>
+          <ClickSparkle>
+            <Button asChild className="shrink-0 h-11 rounded-full px-5 shadow-sm">
+              <Link to="/post/new">
+                <Plus className="mr-1.5 h-4 w-4" /> Share a story
+              </Link>
+            </Button>
+          </ClickSparkle>
         </div>
-        <ClickSparkle>
-          <Button asChild className="shrink-0 rounded-full">
-            <Link to="/post/new">
-              <Plus className="mr-1 h-4 w-4" /> Share a story
-            </Link>
-          </Button>
-        </ClickSparkle>
       </header>
 
       <div className="mt-8 flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-        {TAGS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTag(t.key)}
-            className={
-              "shrink-0 rounded-full border px-4 py-1.5 text-xs uppercase tracking-[0.18em] transition-all duration-200 " +
-              (tag === t.key
-                ? "border-foreground bg-foreground text-background"
-                : "border-border text-muted-foreground hover:border-muted-foreground hover:text-foreground")
-            }
-          >
-            {t.label}
-          </button>
-        ))}
+        {TAGS.map((t) => {
+          const active = tag === t.key;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTag(t.key)}
+              aria-pressed={active}
+              className={
+                "shrink-0 rounded-full px-5 py-2 text-xs uppercase tracking-[0.18em] transition-all duration-300 " +
+                (active
+                  ? "bg-[var(--rose-deep)] text-white shadow-[0_4px_18px_-6px_oklch(0.42_0.10_20_/_0.7)]"
+                  : "border border-border text-muted-foreground hover:border-[var(--rose)]/60 hover:text-foreground hover:shadow-sm")
+              }
+            >
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-8 space-y-5">
@@ -171,14 +191,27 @@ function FeedPage() {
         )}
 
         {isEmpty && !isError && (
-          <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center animate-in fade-in zoom-in duration-500">
-            <p className="font-serif text-2xl text-foreground">It's quiet here.</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Be the first to share a story today.
+          <div className="relative overflow-hidden rounded-3xl border border-dashed border-[var(--rose)]/40 bg-gradient-to-br from-[var(--rose-soft)]/40 via-card to-[var(--peach)]/30 p-12 text-center animate-in fade-in zoom-in duration-500">
+            <div
+              aria-hidden
+              className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[var(--rose)]/15 blur-3xl"
+            />
+            <div className="relative mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-[var(--rose-soft)]/80 shadow-inner">
+              <BookOpen className="h-5 w-5 text-[var(--rose-deep)]" />
+            </div>
+            <p className="relative mt-5 font-serif text-3xl text-foreground">
+              It’s quiet here.
             </p>
-            <Button asChild className="mt-6 rounded-full">
-              <Link to="/post/new">Write something</Link>
-            </Button>
+            <p className="relative mx-auto mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              No stories have landed yet — yours could be the first to open today’s conversation.
+            </p>
+            <ClickSparkle>
+              <Button asChild className="relative mt-7 h-11 rounded-full px-6">
+                <Link to="/post/new">
+                  <PenLine className="mr-2 h-4 w-4" /> Write something
+                </Link>
+              </Button>
+            </ClickSparkle>
           </div>
         )}
 
