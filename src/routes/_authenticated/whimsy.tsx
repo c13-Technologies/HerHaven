@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useWhimsy, DEFAULT_EMOJIS, type EffectSpeed } from "@/hooks/use-whimsy";
+import { useWhimsy, DEFAULT_EMOJIS, type EffectSpeed, type WhimsySettings } from "@/hooks/use-whimsy";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -38,6 +38,59 @@ const SPEED_LABELS: { value: EffectSpeed; label: string }[] = [
   { value: "slow", label: "Gentle" },
   { value: "medium", label: "Breezy" },
   { value: "fast", label: "Lively" },
+];
+
+// ── intensity presets ──────────────────────────────────
+
+const INTENSITY_PRESETS: { key: string; label: string; desc: string; emoji: string; patch: Partial<WhimsySettings> }[] = [
+  {
+    key: "calm",
+    label: "Calm",
+    desc: "A soft whisper",
+    emoji: "🌙",
+    patch: {
+      effectsEnabled: true,
+      sparklesEnabled: true,
+      blossomsEnabled: true,
+      heartsEnabled: true,
+      blossomCount: 10,
+      blossomSize: 8,
+      blossomSpeed: "slow",
+      blossomOpacity: 0.4,
+    },
+  },
+  {
+    key: "balanced",
+    label: "Balanced",
+    desc: "Just right",
+    emoji: "🌸",
+    patch: {
+      effectsEnabled: true,
+      sparklesEnabled: true,
+      blossomsEnabled: true,
+      heartsEnabled: true,
+      blossomCount: 20,
+      blossomSize: 14,
+      blossomSpeed: "medium",
+      blossomOpacity: 0.7,
+    },
+  },
+  {
+    key: "extra",
+    label: "Extra",
+    desc: "Full whimsy",
+    emoji: "✨",
+    patch: {
+      effectsEnabled: true,
+      sparklesEnabled: true,
+      blossomsEnabled: true,
+      heartsEnabled: true,
+      blossomCount: 35,
+      blossomSize: 20,
+      blossomSpeed: "fast",
+      blossomOpacity: 1,
+    },
+  },
 ];
 
 // ── emoji picker ───────────────────────────────────────
@@ -159,6 +212,35 @@ function WhimsyPage() {
 
       {settings.effectsEnabled && (
         <>
+          {/* ── Intensity presets ───────────────────── */}
+          <div className="mt-6">
+            <p className="mb-3 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              Intensity
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {INTENSITY_PRESETS.map(({ key, label, desc, emoji, patch }) => {
+                const isActive = Object.entries(patch).every(
+                  ([k, v]) => settings[k as keyof WhimsySettings] === v,
+                );
+                return (
+                  <button
+                    key={key}
+                    onClick={() => update(patch)}
+                    className={`rounded-xl border p-3 text-center transition ${
+                      isActive
+                        ? "border-[var(--rose-deep)] bg-[var(--rose-soft)]"
+                        : "border-border hover:border-muted-foreground"
+                    }`}
+                  >
+                    <span className="text-xl">{emoji}</span>
+                    <p className="mt-1 text-xs font-medium text-foreground">{label}</p>
+                    <p className="text-[10px] text-muted-foreground">{desc}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* ── Per-effect toggles ────────────────────── */}
           <div className="mt-4 grid gap-3">
             {[
