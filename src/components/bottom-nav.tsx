@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Compass, LayoutGrid, User, Plus, Search } from "lucide-react";
+import { Home, Compass, LayoutGrid, User, Plus, Search, Palette } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 const TABS = [
@@ -58,12 +58,21 @@ export function MobileFab() {
   if (!user) return null;
 
   return (
-    <Link
-      to="/post/new"
-      className="fixed bottom-20 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-background shadow-lg transition hover:scale-105 hover:shadow-xl active:scale-95 sm:hidden"
-      aria-label="New post"
-    >
-      <Plus className="h-6 w-6" />
-    </Link>
+    <>
+      <Link
+        to="/whimsy"
+        className="fixed bottom-36 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/85 backdrop-blur-md text-muted-foreground shadow-md transition hover:scale-105 hover:text-foreground hover:shadow-lg active:scale-95 sm:hidden"
+        aria-label="Customise effects"
+      >
+        <Palette className="h-5 w-5" />
+      </Link>
+      <Link
+        to="/post/new"
+        className="fixed bottom-20 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-foreground text-background shadow-lg transition hover:scale-105 hover:shadow-xl active:scale-95 sm:hidden"
+        aria-label="New post"
+      >
+        <Plus className="h-6 w-6" />
+      </Link>
+    </>
   );
 }

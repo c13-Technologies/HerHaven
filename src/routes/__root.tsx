@@ -8,7 +8,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { useTheme } from "../hooks/use-theme";
 
 import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,6 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { BottomNav, MobileFab } from "@/components/bottom-nav";
+import { WhimsyProvider } from "@/hooks/use-whimsy";
 
 function NotFoundComponent() {
   return (
@@ -158,6 +158,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <WhimsyProvider>
       <div className="flex min-h-dvh flex-col bg-background pb-16 sm:pb-0">
         <SiteHeader />
         <main className="flex-1">
@@ -168,6 +169,7 @@ function RootComponent() {
         <MobileFab />
       </div>
       <Toaster position="top-center" richColors />
+      </WhimsyProvider>
     </QueryClientProvider>
   );
 }

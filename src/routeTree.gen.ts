@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedWhimsyRouteImport } from './routes/_authenticated/whimsy'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMeRouteImport } from './routes/_authenticated/me'
@@ -56,6 +57,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedWhimsyRoute = AuthenticatedWhimsyRouteImport.update({
+  id: '/whimsy',
+  path: '/whimsy',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/me': typeof AuthenticatedMeRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/whimsy': typeof AuthenticatedWhimsyRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/me': typeof AuthenticatedMeRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/whimsy': typeof AuthenticatedWhimsyRoute
   '/c/$slug': typeof AuthenticatedCSlugRoute
   '/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/post/$id': typeof AuthenticatedPostIdRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/_authenticated/me': typeof AuthenticatedMeRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
+  '/_authenticated/whimsy': typeof AuthenticatedWhimsyRoute
   '/_authenticated/c/$slug': typeof AuthenticatedCSlugRoute
   '/_authenticated/circles/$id': typeof AuthenticatedCirclesIdRoute
   '/_authenticated/post/$id': typeof AuthenticatedPostIdRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/me'
     | '/notifications'
     | '/search'
+    | '/whimsy'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/me'
     | '/notifications'
     | '/search'
+    | '/whimsy'
     | '/c/$slug'
     | '/circles/$id'
     | '/post/$id'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/_authenticated/me'
     | '/_authenticated/notifications'
     | '/_authenticated/search'
+    | '/_authenticated/whimsy'
     | '/_authenticated/c/$slug'
     | '/_authenticated/circles/$id'
     | '/_authenticated/post/$id'
@@ -291,6 +303,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/whimsy': {
+      id: '/_authenticated/whimsy'
+      path: '/whimsy'
+      fullPath: '/whimsy'
+      preLoaderRoute: typeof AuthenticatedWhimsyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/search': {
       id: '/_authenticated/search'
@@ -398,6 +417,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMeRoute: typeof AuthenticatedMeRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedWhimsyRoute: typeof AuthenticatedWhimsyRoute
   AuthenticatedCSlugRoute: typeof AuthenticatedCSlugRoute
   AuthenticatedPostIdRoute: typeof AuthenticatedPostIdRoute
   AuthenticatedPostNewRoute: typeof AuthenticatedPostNewRoute
@@ -412,6 +432,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMeRoute: AuthenticatedMeRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
+  AuthenticatedWhimsyRoute: AuthenticatedWhimsyRoute,
   AuthenticatedCSlugRoute: AuthenticatedCSlugRoute,
   AuthenticatedPostIdRoute: AuthenticatedPostIdRoute,
   AuthenticatedPostNewRoute: AuthenticatedPostNewRoute,
