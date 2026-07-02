@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Heart, Hand, Flag, Trash2 } from "lucide-react";
+import { Heart, Hand, Flag, Trash2, Twitter, Facebook, Linkedin, Link2, Check } from "lucide-react";
 import { CommentCard, buildCommentTree, type CommentData, type CommentReactionMap } from "@/components/comment-card";
 import { toast } from "sonner";
 import {
@@ -40,6 +40,8 @@ function PostPage() {
   const [acknowledgedSensitive, setAck] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
+  const [copied, setCopied] = useState(false);
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const { data: post } = useQuery({
     queryKey: ["post", id],
@@ -348,6 +350,52 @@ function PostPage() {
               <Trash2 className="h-3.5 w-3.5" /> Delete
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Share */}
+      <div className="flex items-center gap-3 border-b border-border py-4">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Share this story</span>
+        <div className="flex items-center gap-1">
+          {[
+            {
+              icon: Twitter,
+              label: "Twitter",
+              href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}`,
+            },
+            {
+              icon: Facebook,
+              label: "Facebook",
+              href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+            },
+            {
+              icon: Linkedin,
+              label: "LinkedIn",
+              href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(post.title)}`,
+            },
+          ].map(({ icon: Icon, label, href }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Share on ${label}`}
+              className="grid h-8 w-8 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--rose-deep)] hover:text-[var(--rose-deep)]"
+            >
+              <Icon className="h-3.5 w-3.5" />
+            </a>
+          ))}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(shareUrl);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            aria-label="Copy link"
+            className="grid h-8 w-8 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--rose-deep)] hover:text-[var(--rose-deep)]"
+          >
+            {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Link2 className="h-3.5 w-3.5" />}
+          </button>
         </div>
       </div>
 
