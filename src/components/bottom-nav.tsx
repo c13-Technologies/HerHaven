@@ -73,6 +73,15 @@ export function MobileFab() {
       >
         <Plus className="h-6 w-6" />
       </Link>
+
+      {/* Desktop whimsy FAB */}
+      <Link
+        to="/whimsy"
+        className="hidden sm:flex fixed bottom-8 right-8 z-50 h-12 w-12 items-center justify-center rounded-full border border-border bg-background/85 backdrop-blur-md text-muted-foreground shadow-lg transition hover:scale-110 hover:text-foreground hover:shadow-xl active:scale-95"
+        aria-label="Customise effects"
+      >
+        <Palette className="h-5 w-5" />
+      </Link>
     </>
   );
 }
