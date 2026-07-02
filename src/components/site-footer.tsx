@@ -20,8 +20,11 @@ export function SiteFooter() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
               A safe place, Real talks, Strong together.
             </p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              A safe place, Real talks, Strong together.
+            <p className="mt-2 max-w-xs text-xs leading-relaxed text-muted-foreground">
+              Her Haven is a women-only community where you can share your story
+              anonymously, find support in private circles, and grow through
+              honest conversations about relationships, career, motherhood,
+              wellness, and faith.
             </p>
             <div className="mt-4 flex items-center gap-3">
               <a
