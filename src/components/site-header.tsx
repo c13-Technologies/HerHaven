@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X, Moon, Sun, Bell } from "lucide-react";
+import { Menu, X, Moon, Sun, Bell, Palette } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
@@ -87,6 +87,13 @@ export function SiteHeader() {
                 {unreadCount > 0 && (
                   <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[var(--rose-deep)]" />
                 )}
+              </Link>
+              <Link
+                to="/whimsy"
+                className="grid h-9 w-9 place-items-center rounded-full border border-border bg-transparent text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                aria-label="Customise effects"
+              >
+                <Palette className="h-4 w-4" />
               </Link>
               <Link
                 to="/me"
