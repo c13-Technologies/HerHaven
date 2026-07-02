@@ -20,6 +20,9 @@ export function SiteFooter() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
               A safe place, Real talks, Strong together.
             </p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              A safe place, Real talks, Strong together.
+            </p>
             <div className="mt-4 flex items-center gap-3">
               <a
                 href="#"

@@ -30,7 +30,7 @@ export function SiteHeader() {
           <img
             src="/logo.jpg"
             alt="Her Haven"
-            className="h-8 w-8 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover"
           />
           <span className="font-serif text-lg tracking-tight text-foreground">
             Her Haven
