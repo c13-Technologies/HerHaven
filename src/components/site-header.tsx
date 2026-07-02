@@ -27,9 +27,11 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center px-5 sm:px-8">
         {/* Logo — always on the left */}
         <Link to="/" className="flex shrink-0 items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--rose-soft)] text-[var(--rose-deep)]">
-            <span className="font-serif text-base italic">h</span>
-          </span>
+          <img
+            src="/logo.jpg"
+            alt="Her Haven"
+            className="h-8 w-8 rounded-full object-cover"
+          />
           <span className="font-serif text-lg tracking-tight text-foreground">
             Her Haven
           </span>
