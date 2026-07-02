@@ -13,6 +13,7 @@
       sets these cascade variables inline so Tailwind's bg-background
       utility doesn't flash white in dark mode before this sheet loads. --
 
+/* mirrors inline theme script in __root.tsx — keep OKLCH values in sync */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -59,7 +60,8 @@
 :root {
   --radius: 0.75rem;
 
-  /* paper-warm background, stone ink */
+  /* paper-warm background, stone ink
+     -- mirrors inline theme script in __root.tsx (light branch) -- */
   --background: oklch(0.985 0.006 70);          /* #fdfcfb */
   --foreground: oklch(0.22 0.015 30);           /* deep stone */
 
@@ -110,6 +112,7 @@
 }
 
 .dark {
+  /* -- mirrors inline theme script in __root.tsx (dark branch) -- */
   --background: oklch(0.18 0.012 30);           /* warm dark stone */
   --foreground: oklch(0.94 0.006 70);           /* soft cream text */
 
