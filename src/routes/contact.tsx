@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -36,6 +37,38 @@ function ContactPage() {
             safety@herhaven.app
           </a>
           <p className="mt-1 text-xs text-muted-foreground">For urgent reports, use the in-app report button.</p>
+        </div>
+        <div className="border-t border-border pt-5">
+          <p className="eyebrow">Follow us</p>
+          <div className="mt-3 flex items-center gap-4">
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--rose-deep)] hover:text-[var(--rose-deep)]"
+            >
+              <Twitter className="h-4 w-4" />
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--rose-deep)] hover:text-[var(--rose-deep)]"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--rose-deep)] hover:text-[var(--rose-deep)]"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </div>
     </div>
