@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { PostCard, type FeedPost } from "@/components/post-card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard, SkeletonBar } from "@/components/skeleton-card";
 import { Plus, Loader2, BookOpen, PenLine } from "lucide-react";
 import { ClickSparkle } from "@/components/click-sparkle";
 import { CherryBlossoms } from "@/components/cherry-blossoms";
@@ -26,20 +26,22 @@ export const Route = createFileRoute("/_authenticated/feed")({
 
 function FeedSkeleton() {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center gap-2">
-        <Skeleton className="h-5 w-20 rounded-full" />
-        <Skeleton className="h-4 w-16 rounded-full" />
+    <SkeletonCard className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <SkeletonBar className="h-5 w-20 rounded-full" />
+          <SkeletonBar className="h-4 w-16 rounded-full" />
+        </div>
+        <SkeletonBar className="h-7 w-4/5" />
+        <SkeletonBar className="h-4 w-full" />
+        <SkeletonBar className="h-4 w-3/4" />
+        <SkeletonBar className="h-4 w-full" />
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <SkeletonBar className="h-4 w-24" />
+          <SkeletonBar className="h-4 w-20" />
+        </div>
       </div>
-      <Skeleton className="h-7 w-4/5" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-3/4" />
-      <Skeleton className="h-4 w-full" />
-      <div className="flex items-center justify-between pt-4 border-t border-border">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-4 w-20" />
-      </div>
-    </div>
+    </SkeletonCard>
   );
 }
 

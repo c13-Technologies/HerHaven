@@ -280,6 +280,38 @@
   100% { transform: translateY(100px) rotate(var(--pr, 360deg)) translateX(var(--px, 20px)); opacity: 0; }
 }
 
+/* ============================================================
+   Skeleton shimmer — slides a soft highlight across the card
+   while inner bars stay static (their built-in pulse is suppressed
+   on the wrapper). Respects prefers-reduced-motion.
+   ============================================================ */
+
+@keyframes shimmer-slide {
+  0%   { transform: translateX(-120%); }
+  60%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+
+.skeleton-shimmer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--foreground) 8%, transparent) 50%,
+    transparent 100%
+  );
+  animation: shimmer-slide 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
 .blossom-petal {
   position: fixed;
   top: -5vh;
