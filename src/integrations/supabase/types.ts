@@ -360,6 +360,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          metadata: Json | null
           reason: string
           reporter_id: string
           status: Database["public"]["Enums"]["report_status"]
@@ -369,6 +370,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          metadata?: Json | null
           reason: string
           reporter_id: string
           status?: Database["public"]["Enums"]["report_status"]
@@ -378,6 +380,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          metadata?: Json | null
           reason?: string
           reporter_id?: string
           status?: Database["public"]["Enums"]["report_status"]
