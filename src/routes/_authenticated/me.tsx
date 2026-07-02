@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth, type SocialLinks } from "@/hooks/use-auth";
 import { AvatarUploader } from "@/components/avatar-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { PostCard, type FeedPost } from "@/components/post-card";
 import { toast } from "sonner";
+import { Globe, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/me")({
   head: () => ({ meta: [{ title: "My profile · Her Haven" }] }),
@@ -25,6 +26,7 @@ function MePage() {
   const [bio, setBio] = useState("");
   const [anon, setAnon] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ function MePage() {
       setBio(profile.bio ?? "");
       setAnon(profile.default_anonymous);
       setAvatarUrl(profile.avatar_url ?? null);
+      setSocialLinks(profile.social_links ?? {});
     }
   }, [profile]);
 
@@ -55,13 +58,18 @@ function MePage() {
   const save = async () => {
     if (!user) return;
     setSaving(true);
-    const { error } = await supabase
-      .from("profiles")
+    const cleaned: SocialLinks = {};
+    for (const [k, v] of Object.entries(socialLinks)) {
+      if (v && v.trim()) cleaned[k as keyof SocialLinks] = v.trim();
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from("profiles") as any)
       .update({
         display_name: displayName.trim() || null,
         username: username.trim().toLowerCase() || null,
         bio: bio.trim() || null,
         default_anonymous: anon,
+        social_links: Object.keys(cleaned).length > 0 ? cleaned : null,
       })
       .eq("id", user.id);
     setSaving(false);
@@ -140,6 +148,34 @@ function MePage() {
           <Label>Bio</Label>
           <Textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="mt-1.5" maxLength={280} />
         </div>
+        {/* Social links */}
+        <div className="mt-5 border-t border-border pt-5">
+          <h3 className="mb-3 font-serif text-base text-foreground">Social links</h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {([
+              ["website", Globe, "Your website", "https://yoursite.com"],
+              ["twitter", Twitter, "Twitter / X", "https://x.com/yourhandle"],
+              ["instagram", Instagram, "Instagram", "https://instagram.com/yourhandle"],
+              ["linkedin", Linkedin, "LinkedIn", "https://linkedin.com/in/yourhandle"],
+            ] as const).map(([key, Icon, label, placeholder]) => (
+              <div key={key} className="relative">
+                <Label className="text-xs text-muted-foreground">{label}</Label>
+                <div className="relative mt-1">
+                  <Icon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={socialLinks[key] ?? ""}
+                    onChange={(e) =>
+                      setSocialLinks((p) => ({ ...p, [key]: e.target.value }))
+                    }
+                    placeholder={placeholder}
+                    className="pl-9"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <label className="mt-5 flex items-center justify-between gap-4 border-t border-border pt-5">
           <div>
             <p className="text-sm font-medium text-foreground">Post anonymously by default</p>

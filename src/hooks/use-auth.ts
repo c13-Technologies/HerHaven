@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+export interface SocialLinks {
+  website?: string;
+  twitter?: string;
+  instagram?: string;
+  linkedin?: string;
+}
+
 export interface Profile {
   id: string;
   username: string | null;
@@ -9,6 +16,7 @@ export interface Profile {
   bio: string | null;
   avatar_url: string | null;
   default_anonymous: boolean;
+  social_links?: SocialLinks | null;
 }
 
 export function useAuth() {
