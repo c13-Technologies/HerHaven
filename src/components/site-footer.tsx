@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Twitter, Instagram, Linkedin } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -19,6 +20,35 @@ export function SiteFooter() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
               A safe place, Real talks, Strong together.
             </p>
+            <div className="mt-4 flex items-center gap-3">
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                className="text-muted-foreground transition hover:text-[var(--rose-deep)]"
+              >
+                <Twitter className="h-4 w-4" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-muted-foreground transition hover:text-[var(--rose-deep)]"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-muted-foreground transition hover:text-[var(--rose-deep)]"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           <div className="space-y-2 text-sm">
