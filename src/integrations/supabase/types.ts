@@ -455,6 +455,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      admin_reorder_categories: {
+        Args: { p_slugs: string[] }
+        Returns: undefined
+      }
       admin_hide_content: {
         Args: { p_reason: string; p_target_id: string; p_type: string }
         Returns: undefined
