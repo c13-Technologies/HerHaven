@@ -6,9 +6,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [
     tanstackStart({
-  server: { entry: "server" },
-  target: 'vercel',
-  }),
+      server: {
+        entry: "server",
+        preset: "vercel",
+      },
+    }),
     react(),
     tailwindcss(),
   ],
