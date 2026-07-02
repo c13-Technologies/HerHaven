@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { useNotificationCount } from "@/hooks/use-notification-count";
 import { Button } from "@/components/ui/button";
+import { ClickSparkle } from "@/components/click-sparkle";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -112,11 +113,13 @@ export function SiteHeader() {
               >
                 Sign in
               </Link>
-              <Button asChild className="rounded-full">
-                <Link to="/auth" search={{ mode: "signup" }}>
-                  Join Her Haven
-                </Link>
-              </Button>
+              <ClickSparkle>
+                <Button asChild className="rounded-full">
+                  <Link to="/auth" search={{ mode: "signup" }}>
+                    Join Her Haven
+                  </Link>
+                </Button>
+              </ClickSparkle>
             </>
           )}
         </div>

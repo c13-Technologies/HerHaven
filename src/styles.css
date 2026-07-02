@@ -211,3 +211,76 @@
   font-weight: 500;
   color: var(--muted-foreground);
 }
+
+/* ============================================================
+   Whimsy effects — sparkles, blossoms, floating hearts
+   ============================================================ */
+
+@keyframes sparkle-burst {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--sx), var(--sy)) scale(0); opacity: 0; }
+}
+
+@keyframes petal-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg) translateX(0px); opacity: 0.8; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(var(--pr, 360deg)) translateX(var(--px, 60px)); opacity: 0; }
+}
+
+@keyframes petal-sway {
+  0%, 100% { margin-left: 0; }
+  50%      { margin-left: var(--sw, 30px); }
+}
+
+@keyframes heart-float {
+  0%   { transform: translateY(0) scale(0.3) rotate(0deg); opacity: 1; }
+  30%  { transform: translateY(-20px) scale(1.1) rotate(10deg); opacity: 1; }
+  70%  { transform: translateY(-50px) scale(0.8) rotate(-10deg); opacity: 0.7; }
+  100% { transform: translateY(-80px) scale(0.2) rotate(15deg); opacity: 0; }
+}
+
+@keyframes heart-burst {
+  0%   { transform: translate(0, 0) scale(0); opacity: 0; }
+  40%  { transform: translate(var(--hx), var(--hy)) scale(1); opacity: 1; }
+  100% { transform: translate(var(--hx), var(--hy)) scale(0.5); opacity: 0; }
+}
+
+.sparkle-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: sparkle-burst 0.8s ease-out forwards;
+  --sx: 0px;
+  --sy: 0px;
+}
+
+.heart-float-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: heart-float 1s ease-out forwards;
+  color: var(--rose-deep);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.heart-burst-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: heart-burst 0.7s ease-out forwards;
+  font-size: 1rem;
+  line-height: 1;
+  --hx: 0px;
+  --hy: 0px;
+}
+
+.blossom-petal {
+  position: fixed;
+  top: -5vh;
+  pointer-events: none;
+  z-index: 0;
+  animation: petal-fall var(--dur, 8s) linear infinite;
+  animation-delay: var(--del, 0s);
+  --pr: 360deg;
+  --px: 40px;
+  --sw: 30px;
+}

@@ -6,6 +6,8 @@ import { PostCard, type FeedPost } from "@/components/post-card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Loader2 } from "lucide-react";
+import { ClickSparkle } from "@/components/click-sparkle";
+import { CherryBlossoms } from "@/components/cherry-blossoms";
 
 const TAGS = [
   { key: "all", label: "All stories" },
@@ -95,6 +97,7 @@ function FeedPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
+      <CherryBlossoms />
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="eyebrow">The community feed</p>
@@ -102,11 +105,13 @@ function FeedPage() {
             Today's stories
           </h1>
         </div>
-        <Button asChild className="shrink-0 rounded-full">
-          <Link to="/post/new">
-            <Plus className="mr-1 h-4 w-4" /> Share a story
-          </Link>
-        </Button>
+        <ClickSparkle>
+          <Button asChild className="shrink-0 rounded-full">
+            <Link to="/post/new">
+              <Plus className="mr-1 h-4 w-4" /> Share a story
+            </Link>
+          </Button>
+        </ClickSparkle>
       </header>
 
       <div className="mt-8 flex gap-2 overflow-x-auto pb-2 no-scrollbar">

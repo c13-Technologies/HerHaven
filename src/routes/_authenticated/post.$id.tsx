@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Heart, Hand, Flag, Trash2, Twitter, Facebook, Linkedin, Link2, Check } from "lucide-react";
 import { CommentCard, buildCommentTree, type CommentData, type CommentReactionMap } from "@/components/comment-card";
+import { useFloatingHearts } from "@/components/floating-hearts";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -42,6 +43,7 @@ function PostPage() {
   const [reportReason, setReportReason] = useState("");
   const [copied, setCopied] = useState(false);
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const { ref: heartsRef, burst: burstHearts } = useFloatingHearts();
 
   const { data: post } = useQuery({
     queryKey: ["post", id],
@@ -149,6 +151,7 @@ function PostPage() {
 
   const toggleReaction = async (type: "heart" | "hug") => {
     if (!user) return;
+    if (type === "heart") burstHearts();
     if (mine.has(type)) {
       await supabase.from("reactions").delete().match({ post_id: id, user_id: user.id, type });
     } else {
@@ -293,7 +296,7 @@ function PostPage() {
         {post.body}
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center gap-2 border-y border-border py-4">
+      <div className="mt-10 flex flex-wrap items-center gap-2 border-y border-border py-4" ref={heartsRef}>
         {REACTIONS.map(({ type, Icon, label }) => (
           <button
             key={type}
