@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle, Bookmark, BookOpen } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export interface FeedPost {
   id: string;
@@ -41,6 +41,17 @@ export function PostCard({ post }: { post: FeedPost }) {
   const [likeAnim, setLikeAnim] = useState(false);
   const [saveAnim, setSaveAnim] = useState(false);
   const [confirmingSave, setConfirmingSave] = useState(false);
+  const confirmTimerRef = useRef<number | null>(null);
+
+  // Clear any pending bookmark-confirm timer on unmount (and on remount).
+  useEffect(() => {
+    return () => {
+      if (confirmTimerRef.current !== null) {
+        window.clearTimeout(confirmTimerRef.current);
+        confirmTimerRef.current = null;
+      }
+    };
+  }, []);
 
   const readingMinutes = useMemo(
     () => Math.max(1, Math.round(post.body.split(/\s+/).filter(Boolean).length / READING_WPM)),
@@ -69,9 +80,15 @@ export function PostCard({ post }: { post: FeedPost }) {
     setSaved((s) => !s);
     setSaveAnim(true);
     setConfirmingSave(true);
-    window.setTimeout(() => {
+
+    // Reset the timer on rapid taps so the animation restarts cleanly each time.
+    if (confirmTimerRef.current !== null) {
+      window.clearTimeout(confirmTimerRef.current);
+    }
+    confirmTimerRef.current = window.setTimeout(() => {
       setSaveAnim(false);
       setConfirmingSave(false);
+      confirmTimerRef.current = null;
     }, 600);
   };
 
