@@ -2,6 +2,8 @@
 
 A safe, supportive community platform for women to connect, share, and grow together. Built with TanStack Start, Supabase, and Tailwind CSS.
 
+**🔗 Live site:** [https://her-haven-as5j.vercel.app/](https://her-haven-as5j.vercel.app/)
+
 ## Features
 
 - **👤 Authentication** — Email/password and Google OAuth sign-in via Supabase Auth
