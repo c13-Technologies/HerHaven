@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { getJournalPrompt } from "@/lib/ai.functions";
+import { CategoryIcon } from "@/lib/category-icons";
 
 const searchSchema = z.object({ category: z.string().optional() });
 
@@ -38,7 +39,7 @@ function NewPostPage() {
   const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const { data } = await supabase.from("categories").select("*").order("ord");
+      const { data } = await supabase.from("categories").select("slug, name, ord").order("ord");
       return data ?? [];
     },
   });
@@ -122,17 +123,22 @@ function NewPostPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <Label>Category</Label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="mt-1.5 h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-            >
-              {categories?.map((c) => (
-                <option key={c.slug} value={c.slug}>
-                  {c.emoji} {c.name}
-                </option>
-              ))}
-            </select>
+            <div className="mt-1.5 flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-[var(--rose-soft)]/70 text-[var(--rose-deep)] ring-1 ring-[var(--rose)]/20">
+                <CategoryIcon slug={category} className="h-5 w-5" />
+              </span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+              >
+                {categories?.map((c) => (
+                  <option key={c.slug} value={c.slug}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div>
             <Label>Tag</Label>

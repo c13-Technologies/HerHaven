@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { formatDistanceToNow } from "date-fns";
 import { Heart, MessageCircle, Bookmark, BookOpen } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { CategoryIcon } from "@/lib/category-icons";
 
 export interface FeedPost {
   id: string;
@@ -122,8 +123,9 @@ export function PostCard({ post }: { post: FeedPost }) {
         <Link
           to="/c/$slug"
           params={{ slug: post.category_slug }}
-          className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground hover:text-[var(--rose-deep)]"
+          className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.22em] text-muted-foreground hover:text-[var(--rose-deep)]"
         >
+          <CategoryIcon slug={post.category_slug} className="h-3 w-3" />
           {formatCategory(post.category_slug)}
         </Link>
         <span className="text-muted-foreground/40">·</span>
