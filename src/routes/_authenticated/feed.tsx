@@ -49,6 +49,9 @@ function FeedPage() {
   const {
     data,
     isLoading,
+    isError,
+    error,
+    refetch,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
@@ -140,7 +143,34 @@ function FeedPage() {
           </>
         )}
 
-        {isEmpty && (
+        {isError && (
+          <div className="rounded-2xl border border-destructive/40 bg-destructive/5 p-8 text-center">
+            <p className="font-serif text-xl text-foreground">
+              We couldn’t load the feed.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Something went wrong talking to the database. Try again in a moment.
+            </p>
+            {error instanceof Error && (
+              <p className="mt-1 text-xs text-muted-foreground/70 italic hidden">
+                {error.message}
+              </p>
+            )}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                console.error("Feed query failed:", error);
+                refetch();
+              }}
+              className="mt-5 rounded-full"
+            >
+              Try again
+            </Button>
+          </div>
+        )}
+
+        {isEmpty && !isError && (
           <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center animate-in fade-in zoom-in duration-500">
             <p className="font-serif text-2xl text-foreground">It's quiet here.</p>
             <p className="mt-2 text-sm text-muted-foreground">
