@@ -40,6 +40,7 @@ export function PostCard({ post }: { post: FeedPost }) {
   const [saved, setSaved] = useState(false);
   const [likeAnim, setLikeAnim] = useState(false);
   const [saveAnim, setSaveAnim] = useState(false);
+  const [confirmingSave, setConfirmingSave] = useState(false);
 
   const readingMinutes = useMemo(
     () => Math.max(1, Math.round(post.body.split(/\s+/).filter(Boolean).length / READING_WPM)),
@@ -67,7 +68,11 @@ export function PostCard({ post }: { post: FeedPost }) {
     e.stopPropagation();
     setSaved((s) => !s);
     setSaveAnim(true);
-    window.setTimeout(() => setSaveAnim(false), 500);
+    setConfirmingSave(true);
+    window.setTimeout(() => {
+      setSaveAnim(false);
+      setConfirmingSave(false);
+    }, 600);
   };
 
   return (
@@ -91,6 +96,7 @@ export function PostCard({ post }: { post: FeedPost }) {
         }
       >
         <Bookmark className={"h-4 w-4 " + (saved ? "fill-[var(--rose-deep)]" : "")} />
+        {confirmingSave && <span aria-hidden="true" className="save-confirm-dot" />}
       </button>
 
       <header className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
