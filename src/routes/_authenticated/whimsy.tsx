@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Sparkles, Flower2, Heart, RotateCcw, Palette } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export const Route = createFileRoute("/_authenticated/whimsy")({
   head: () => ({ meta: [{ title: "Customise effects · Her Haven" }] }),
@@ -92,6 +92,53 @@ const INTENSITY_PRESETS: { key: string; label: string; desc: string; emoji: stri
     },
   },
 ];
+
+// ── blossom preview ────────────────────────────────────
+
+const PREVIEW_SPEED: Record<EffectSpeed, number> = { slow: 8, medium: 6, fast: 4 };
+
+function BlossomPreview({ settings }: { settings: WhimsySettings }) {
+  const petals = useMemo(() => {
+    const emojis = settings.blossomEmojis;
+    const dur = PREVIEW_SPEED[settings.blossomSpeed];
+    return Array.from({ length: 6 }, (_, i) => ({
+      id: i,
+      emoji: emojis[i % emojis.length],
+      left: 5 + (i * 16) + (Math.random() - 0.5) * 8,
+      delay: i * 0.8,
+      duration: dur + Math.random() * 2,
+      rotate: 200 + Math.random() * 300,
+      drift: 10 + Math.random() * 20,
+    }));
+  }, [settings]);
+
+  return (
+    <div className="relative h-24 overflow-hidden rounded-xl border border-border bg-[var(--paper)]">
+      <p className="absolute left-3 top-2 text-[9px] uppercase tracking-[0.22em] text-muted-foreground/40">
+        Preview
+      </p>
+      {petals.map((p) => (
+        <span
+          key={p.id}
+          className="pointer-events-none"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: `${p.left}%`,
+            fontSize: `${settings.blossomSize}px`,
+            opacity: settings.blossomOpacity,
+            animation: `blossom-preview-fall ${p.duration}s linear infinite`,
+            animationDelay: `${p.delay}s`,
+            "--pr": `${p.rotate}deg`,
+            "--px": `${p.drift}px`,
+          } as React.CSSProperties}
+        >
+          {p.emoji}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 // ── emoji picker ───────────────────────────────────────
 
@@ -286,6 +333,9 @@ function WhimsyPage() {
           {settings.blossomsEnabled && (
             <div className="mt-8 rounded-2xl border border-border bg-card p-6 space-y-6">
               <p className="eyebrow">🌸 Blossom settings</p>
+
+              {/* Live preview */}
+              <BlossomPreview settings={settings} />
 
               {/* Count */}
               <div className="space-y-2">

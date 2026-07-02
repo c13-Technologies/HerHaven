@@ -273,6 +273,13 @@
   --hy: 0px;
 }
 
+@keyframes blossom-preview-fall {
+  0%   { transform: translateY(-100%); opacity: 0.8; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(100px) rotate(var(--pr, 360deg)) translateX(var(--px, 20px)); opacity: 0; }
+}
+
 .blossom-petal {
   position: fixed;
   top: -5vh;
