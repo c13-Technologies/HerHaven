@@ -6,9 +6,16 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
-            <p className="font-serif text-2xl tracking-tight text-foreground">
-              Her Haven
-            </p>
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src="/logo.jpg"
+                alt="Her Haven"
+                className="h-8 w-8 rounded-full object-cover"
+              />
+              <p className="font-serif text-2xl tracking-tight text-foreground">
+                Her Haven
+              </p>
+            </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
               A quiet, supportive corner of the internet for women to share
               stories, ask hard questions, and grow together.
