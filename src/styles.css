@@ -7,7 +7,11 @@
 /* ============================================================
    Her Haven — Serene editorial design system
    Warm paper, soft rose, faded peach, deep stone ink.
-   ============================================================ */
+   ============================================================
+   -- The :root / .dark --background and --foreground values below MUST
+      mirror the inline theme script in src/routes/__root.tsx. The script
+      sets these cascade variables inline so Tailwind's bg-background
+      utility doesn't flash white in dark mode before this sheet loads. --
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
